@@ -4,9 +4,11 @@ const startButton = document.getElementById('startButton');
 const winCountElement = document.getElementById('winCount');
 const loseCountElement = document.getElementById('loseCount');
 
+let fadeOpacity = 0;
+let isGameOver = false;
 let player = {
    x: 100,
-   y: 300,
+   y: 100,
    width: 60,
    height: 160,
    speed: 5,
@@ -16,7 +18,7 @@ let player = {
 
 let opponent = {
    x: 600,
-   y: 300,
+   y: 100,
    width: 60,
    height: 160,
    speed: 2,
@@ -62,39 +64,37 @@ function drawPixelMan(x, y, isAttacking, isBlocking) {
    }
 }
 
-
 function drawOpponent(x, y, isAttacking, isBlocking) {
-   // Draw head
-   ctx.fillStyle = '#f1c27d';
-   ctx.fillRect(x + 20, y, 20, 20);
-
-   // Draw body
-   ctx.fillStyle = message === "You win!" ? 'red' : 'green'; // Change color when player wins
-   ctx.fillRect(x + 10, y + 20, 40, 60);
-
-   // Draw legs
-   ctx.fillStyle = '#2c3e50';
-   ctx.fillRect(x + 10, y + 80, 10, 40);
-   ctx.fillRect(x + 40, y + 80, 10, 40);
-
-   // Draw sword
-   ctx.fillStyle = '#bdc3c7';
-   if (isAttacking) {
-       ctx.fillRect(x - 60, y + 30, 60, 10); // Sword horizontal position
-   } else if (isBlocking) {
-       ctx.fillRect(x - 10, y + 10, 10, 60); // Sword vertical position
-   } else {
-       ctx.beginPath();
-       ctx.moveTo(x - 10, y + 20);
-       ctx.lineTo(x - 50, y + 60);
-       ctx.lineTo(x - 40, y + 70);
-       ctx.lineTo(x, y + 30);
-       ctx.closePath();
-       ctx.fill();
-   }
-}
-
-
+    // Draw head
+    ctx.fillStyle = '#f1c27d';
+    ctx.fillRect(x + 20, y, 20, 20);
+  
+    // Draw body
+    ctx.fillStyle = message === "You win!" ? 'red' : 'green'; // Change color when player wins
+    ctx.fillRect(x + 10, y + 20, 40, 60);
+  
+    // Draw legs
+    ctx.fillStyle = '#2c3e50';
+    ctx.fillRect(x + 10, y + 80, 10, 40);
+    ctx.fillRect(x + 40, y + 80, 10, 40);
+  
+    // Draw sword
+    ctx.fillStyle = '#bdc3c7';
+    if (isAttacking) {
+        ctx.fillRect(x - 40, y + 30, 60, 10); // Sword horizontal position more to the left
+    } else if (isBlocking) {
+        ctx.fillRect(x, y + 10, 10, 60); // Sword vertical position closer to the body
+    } else {
+        ctx.beginPath();
+        ctx.moveTo(x, y + 20);
+        ctx.lineTo(x - 40, y + 60);
+        ctx.lineTo(x - 30, y + 70);
+        ctx.lineTo(x + 10, y + 30);
+        ctx.closePath();
+        ctx.fill();
+    }
+  }
+  
 function update() {
    if (!gameRunning) return;
 
@@ -165,21 +165,37 @@ function resetGame() {
 }
 
 function gameLoop() {
-   ctx.clearRect(0, 0, canvas.width, canvas.height);
-   update();
-   drawPixelMan(player.x, player.y, player.isAttacking, player.isBlocking);
-   drawOpponent(opponent.x, opponent.y, opponent.isAttacking, opponent.isBlocking);
-
-   // Display message
-   if (message) {
-       ctx.fillStyle = 'black';
-       ctx.font = '24px Arial';
-       ctx.textAlign = 'center';
-       ctx.fillText(message, canvas.width / 2, canvas.height / 2);
-   }
-
-   requestAnimationFrame(gameLoop);
-}
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    update();
+    drawPixelMan(player.x, player.y, player.isAttacking, player.isBlocking);
+    drawOpponent(opponent.x, opponent.y, opponent.isAttacking, opponent.isBlocking);
+ 
+    // Check if the game is over
+    if (message === "Game Over!") {
+        isGameOver = true;
+    }
+ 
+    // Display "You Died" message with fade-in effect
+    if (isGameOver) {
+        // Draw black overlay
+        ctx.fillStyle = `rgba(0, 0, 0, ${Math.min(fadeOpacity, 0.7)})`;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+ 
+        // Increase opacity for fade-in effect
+        if (fadeOpacity < 1) {
+            fadeOpacity += 0.01; // Adjust speed of fade-in here
+        }
+ 
+        // Draw "You Died" text
+        ctx.fillStyle = `rgba(255, 0, 0, ${fadeOpacity})`;
+        ctx.font = '48px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText("You Died", canvas.width / 2, canvas.height / 2);
+    }
+ 
+    requestAnimationFrame(gameLoop);
+ }
+ 
 
 window.addEventListener('keydown', (e) => {
    if (!gameRunning) return;
