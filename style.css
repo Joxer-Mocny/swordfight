@@ -1,25 +1,64 @@
-canvas {
-    background: black;
-    display: block;
-    margin: 0 auto;
- }
-
- #scoreboard {
-    text-align: center;
-    font-size: 18px;
-    margin: 10px;
- }
- 
- button {
-    display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
-    font-size: 16px;
- }
-
- #instructions {
-    text-align: center;
-    font-size: 16px;
-    margin: 10px;
- }
- 
+body {
+   background: black; /* Set background color to black */
+   text-align: center; /* Center text alignment */
+   margin: 0; /* Remove default margin */
+   padding: 0; /* Remove default padding */
+   display: flex; /* Use flexbox for layout */
+   flex-direction: column; /* Arrange children in a column */
+   justify-content: center; /* Center content vertically */
+   align-items: center; /* Center content horizontally */
+   height: 100vh; /* Full height of the viewport */
+   overflow: hidden; /* Prevent scrolling */
+  }
+  
+  canvas {
+   border: 2px solid #FFFFFF; /* White border around canvas */
+   box-sizing: border-box; /* Include border in element's total width and height */
+   width: 80%; /* Adjust width as needed */
+   height: 50%; /* Adjust height as needed */
+  }
+  
+  h1 {
+   color: #FFFFFF; /* White text color */
+   margin-top: 5px; /* Small margin above */
+   font-size: 2em; /* Large font size */
+   font-family: Verdana, Geneva, Tahoma, sans-serif; /* Font family */
+   font-weight: bold; /* Bold text */
+   letter-spacing: -1px; /* Slightly reduce letter spacing */
+  }
+  
+  button {
+   background-color: #000; /* Black background */
+   color: #fff; /* White text color */
+   border: 2px solid #fff; /* White border */
+   padding: 10px 20px; /* Padding for button */
+   margin-top: 10px; /* Margin above */
+   cursor: pointer; /* Pointer cursor on hover */
+   border-radius: 10px; /* Rounded corners */
+   transition: background-color 0.3s, color 0.3s; /* Smooth transition for background and text color */
+  }
+  
+  button:hover {
+   background-color: #fff; /* White background on hover */
+   color: #000; /* Black text on hover */
+  }
+  
+  #instructions {
+   background-color: #000; /* Black background */
+   color: #fff; /* White text color */
+   padding: 10px;
+   border-radius: 10px; /* Rounded corners */
+   width: 80%; /* Adjust width as needed */
+   box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); /* Subtle shadow */
+   margin-top: 20px; /* Margin above */
+  }
+  
+  #instructions ul {
+   list-style-type: none; /* Remove bullet points */
+   padding: 0;
+  }
+  
+  #instructions li {
+   margin: 5px 0; /* Margin between list items */
+  }
+  
