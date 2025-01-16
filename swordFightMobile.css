@@ -1,65 +1,76 @@
 body {
-    background: black;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    overflow: hidden;
-  }
-  
-  canvas {
-    border: 2px solid #FFFFFF;
-    box-sizing: border-box;
-    width: 80%;
-    height: 50%;
-  }
-  
-  button {
-    background-color: #000;
-    color: #fff;
-    border: 2px solid #fff;
-    padding: 10px 20px;
-    margin-top: 10px;
-    cursor: pointer;
-    border-radius: 10px;
-    transition: background-color 0.3s, color 0.3s;
-  }
-  
-  button:hover {
-    background-color: #fff;
-    color: #000;
-  }
-  
-  #instructions {
-    background-color: #000;
-    color: #fff;
-    padding: 10px;
-    border-radius: 10px;
-    width: 80%;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-    margin-top: 20px;
-  }
-  
-  #instructions ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  #instructions li {
-    margin: 5px 0;
-  }
-  
-  #controls {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-  }
-  
-  #controls button {
-    margin: 5px;
-  }
-  
+  background: black;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+  touch-action: manipulation; /* Prevent double-tap zoom */
+ }
+ 
+ canvas {
+  border: 2px solid #FFFFFF;
+  box-sizing: border-box;
+  width: 80%;
+  height: 25%;
+ }
+ 
+ button {
+  background-color: #000;
+  color: #fff;
+  border: 2px solid #fff;
+  padding: 10px 20px;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background-color 0.3s, color 0.3s;
+  user-select: none; /* Prevent text selection */
+ }
+ 
+ button:hover {
+  background-color: #fff;
+  color: #000;
+ }
+ 
+ #instructions {
+  background-color: #000;
+  color: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  width: 80%;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  margin-top: 20px;
+ }
+ 
+ #instructions ul {
+  list-style-type: none;
+  padding: 0;
+ }
+ 
+ #instructions li {
+  margin: 5px 0;
+ }
+ 
+ #controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+ }
+ 
+ #controls button {
+  margin: 5px;
+ }
+ 
+ /* Adjust font size for the message and timer */
+ .message {
+  font-size: 36px; /* Smaller font size for "PREY SLAUGHTERED" */
+ }
+ 
+ .timer {
+  font-size: 20px; /* Adjusted font size for the timer */
+  margin-top: 10px; /* Position the timer higher */
+ }
