@@ -1,0 +1,30 @@
+body {
+    background-color: #2F4F4F; /* Dark background color */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+ }
+ 
+ button {
+    background-color: #000; /* Black background */
+    color: #fff; /* White text color */
+    border: 2px solid #fff; /* White border */
+    padding: 10px 20px; /* Padding for button */
+    font-size: 1.5em; /* Large font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 10px; /* Rounded corners */
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition for background and text color */
+ }
+ 
+ button:hover {
+    background-color: #fff; /* White background on hover */
+    color: #000; /* Black text color on hover */
+ }
+ 
+ button:active {
+    background-color: #555; /* Dark grey background when active */
+    color: #fff; /* White text color when active */
+ }

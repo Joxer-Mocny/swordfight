@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="wid=device-width, initial-scale=1.0">
+        <title>Racing Car Game</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <button id="startGameButton">Start Game</button>
+
+   <script>
+       document.getElementById("startGameButton").addEventListener("click", function() {
+           // Check the screen width to determine which version to load
+           if (window.innerWidth <= 768) {
+               // If the screen width is 768px or less, load the mobile version
+               window.location.href = "swordFightMobile.html";
+           } else {
+               // Otherwise, load the desktop version
+               window.location.href = "swordFight.html";
+           }
+       });
+    </script>
+
+    </body>
+</html>

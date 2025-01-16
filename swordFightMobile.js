@@ -1,16 +1,12 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const startButton = document.getElementById('startButton');
-const leftButton = document.getElementById('leftButton');
-const rightButton = document.getElementById('rightButton');
-const attackButton = document.getElementById('attackButton');
-const blockButton = document.getElementById('blockButton');
 
 let player = {
- x: 100,
- y: 100,
- width: 60,
- height: 160,
+ x: 50,
+ y: 50,
+ width: 30,
+ height: 80,
  speed: 5,
  isAttacking: false,
  isBlocking: false,
@@ -18,10 +14,10 @@ let player = {
 };
 
 let opponent = {
- x: 600,
- y: 100,
- width: 60,
- height: 160,
+ x: 300,
+ y: 50,
+ width: 30,
+ height: 80,
  speed: 2,
  direction: -1,
  isAttacking: false,
@@ -36,29 +32,30 @@ let fadeOpacity = 0;
 let isGameOver = false;
 let startTime = 0;
 let elapsedTime = 0;
+let moveDirection = 0; // 0: no movement, -1: left, 1: right
 
 function drawPixelMan(x, y, isAttacking, isBlocking) {
  ctx.fillStyle = '#f1c27d';
- ctx.fillRect(x + 20, y, 20, 20);
+ ctx.fillRect(x + 10, y, 10, 10);
 
  ctx.fillStyle = message === "Game Over!" ? 'red' : '#3498db';
- ctx.fillRect(x + 10, y + 20, 40, 60);
+ ctx.fillRect(x + 5, y + 10, 20, 30);
 
  ctx.fillStyle = '#2c3e50';
- ctx.fillRect(x + 10, y + 80, 10, 40);
- ctx.fillRect(x + 40, y + 80, 10, 40);
+ ctx.fillRect(x + 5, y + 40, 5, 20);
+ ctx.fillRect(x + 20, y + 40, 5, 20);
 
  ctx.fillStyle = '#bdc3c7';
  if (isAttacking) {
-     ctx.fillRect(x + 40, y + 30, 60, 10);
+     ctx.fillRect(x + 20, y + 15, 30, 5);
  } else if (isBlocking) {
-     ctx.fillRect(x + 50, y + 10, 10, 60);
+     ctx.fillRect(x + 25, y + 5, 5, 30);
  } else {
      ctx.beginPath();
-     ctx.moveTo(x + 50, y + 20);
-     ctx.lineTo(x + 90, y + 60);
-     ctx.lineTo(x + 80, y + 70);
-     ctx.lineTo(x + 40, y + 30);
+     ctx.moveTo(x + 25, y + 10);
+     ctx.lineTo(x + 45, y + 30);
+     ctx.lineTo(x + 40, y + 35);
+     ctx.lineTo(x + 20, y + 15);
      ctx.closePath();
      ctx.fill();
  }
@@ -66,26 +63,26 @@ function drawPixelMan(x, y, isAttacking, isBlocking) {
 
 function drawOpponent(x, y, isAttacking, isBlocking) {
  ctx.fillStyle = '#f1c27d';
- ctx.fillRect(x + 20, y, 20, 20);
+ ctx.fillRect(x + 10, y, 10, 10);
 
  ctx.fillStyle = message === "You win!" ? 'red' : 'green';
- ctx.fillRect(x + 10, y + 20, 40, 60);
+ ctx.fillRect(x + 5, y + 10, 20, 30);
 
  ctx.fillStyle = '#2c3e50';
- ctx.fillRect(x + 10, y + 80, 10, 40);
- ctx.fillRect(x + 40, y + 80, 10, 40);
+ ctx.fillRect(x + 5, y + 40, 5, 20);
+ ctx.fillRect(x + 20, y + 40, 5, 20);
 
  ctx.fillStyle = '#bdc3c7';
  if (isAttacking) {
-     ctx.fillRect(x - 40, y + 30, 60, 10);
+     ctx.fillRect(x - 20, y + 15, 30, 5);
  } else if (isBlocking) {
-     ctx.fillRect(x, y + 10, 10, 60);
+     ctx.fillRect(x, y + 5, 5, 30);
  } else {
      ctx.beginPath();
-     ctx.moveTo(x, y + 20);
-     ctx.lineTo(x - 40, y + 60);
-     ctx.lineTo(x - 30, y + 70);
-     ctx.lineTo(x + 10, y + 30);
+     ctx.moveTo(x, y + 10);
+     ctx.lineTo(x - 20, y + 30);
+     ctx.lineTo(x - 15, y + 35);
+     ctx.lineTo(x + 5, y + 15);
      ctx.closePath();
      ctx.fill();
  }
@@ -94,6 +91,10 @@ function drawOpponent(x, y, isAttacking, isBlocking) {
 function update() {
  if (!gameRunning) return;
 
+ // Update player position based on moveDirection
+ player.x += player.speed * moveDirection;
+
+ // Opponent movement
  opponent.x += opponent.speed * opponent.direction;
  if (opponent.x <= 0 || opponent.x >= canvas.width - opponent.width) {
      opponent.direction *= -1;
@@ -146,8 +147,8 @@ function update() {
 }
 
 function resetPositions() {
- player.x = 100;
- opponent.x = 600;
+ player.x = 50;
+ opponent.x = 300;
  player.isAttacking = false;
  player.isBlocking = false;
  opponent.isAttacking = false;
@@ -155,11 +156,11 @@ function resetPositions() {
 }
 
 function resetGame() {
- player.x = 100;
+ player.x = 50;
  player.isAttacking = false;
  player.isBlocking = false;
  player.health = 10;
- opponent.x = 600;
+ opponent.x = 300;
  opponent.isAttacking = false;
  opponent.isBlocking = false;
  opponent.attackCooldown = 0;
@@ -173,14 +174,14 @@ function resetGame() {
 
 function drawHealthBars() {
  ctx.fillStyle = 'red';
- ctx.fillRect(10, 30, (player.health / 10) * 100, 10);
+ ctx.fillRect(10, 10, (player.health / 10) * 100, 5);
  ctx.strokeStyle = 'red';
- ctx.strokeRect(10, 30, 100, 10);
+ ctx.strokeRect(10, 10, 100, 5);
 
  ctx.fillStyle = 'red';
- ctx.fillRect(canvas.width - 110, 30, (opponent.health / 10) * 100, 10);
+ ctx.fillRect(canvas.width - 110, 10, (opponent.health / 10) * 100, 5);
  ctx.strokeStyle = 'red';
- ctx.strokeRect(canvas.width - 110, 30, 100, 10);
+ ctx.strokeRect(canvas.width - 110, 10, 100, 5);
 }
 
 function gameLoop() {
@@ -212,76 +213,52 @@ function gameLoop() {
 }
 
 window.addEventListener('keydown', (e) => {
-   if (!gameRunning) {
-     if (e.key === ' ') {
-       e.preventDefault();
-     }
-     return;
+ if (!gameRunning) {
+   if (e.key === ' ') {
+     e.preventDefault();
    }
+   return;
+ }
 
  switch (e.key) {
-     case 'ArrowLeft':
-         player.x -= player.speed;
-         break;
-     case 'ArrowRight':
-         player.x += player.speed;
-         break;
-     case ' ':
-         e.preventDefault();
-         player.isAttacking = true;
-         player.isBlocking = false;
-         break;
-     case 'Shift':
-         player.isBlocking = true;
-         player.isAttacking = false;
-         break;
+   case 'ArrowLeft':
+     moveDirection = -1;
+     break;
+   case 'ArrowRight':
+     moveDirection = 1;
+     break;
+   case ' ':
+     e.preventDefault();
+     player.isAttacking = true;
+     player.isBlocking = false;
+     break;
+   case 'Shift':
+     player.isBlocking = true;
+     player.isAttacking = false;
+     break;
  }
 });
 
 window.addEventListener('keyup', (e) => {
  if (!gameRunning) return;
 
- if (e.key === ' ') {
+ switch (e.key) {
+   case 'ArrowLeft':
+   case 'ArrowRight':
+     moveDirection = 0;
+     break;
+   case ' ':
      player.isAttacking = false;
- }
- if (e.key === 'Shift') {
+     break;
+   case 'Shift':
      player.isBlocking = false;
+     break;
  }
 });
 
 startButton.addEventListener('click', () => {
  resetGame();
  message = '';
-});
-
-leftButton.addEventListener('mousedown', () => {
-   if (gameRunning) player.x -= player.speed;
-});
-
-rightButton.addEventListener('mousedown', () => {
-   if (gameRunning) player.x += player.speed;
-});
-
-attackButton.addEventListener('mousedown', () => {
-   if (gameRunning) {
-       player.isAttacking = true;
-       player.isBlocking = false;
-   }
-});
-
-attackButton.addEventListener('mouseup', () => {
-   player.isAttacking = false;
-});
-
-blockButton.addEventListener('mousedown', () => {
-   if (gameRunning) {
-       player.isBlocking = true;
-       player.isAttacking = false;
-   }
-});
-
-blockButton.addEventListener('mouseup', () => {
-   player.isBlocking = false;
 });
 
 gameLoop();
