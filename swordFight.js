@@ -98,10 +98,23 @@ function drawOpponent(x, y, isAttacking, isBlocking) {
 function update() {
   if (!gameRunning) return;
 
-  // Opponent movement
-  opponent.x += opponent.speed * opponent.direction;
-  if (opponent.x <= 0 || opponent.x >= canvas.width - opponent.width) {
-      opponent.direction *= -1;
+  // Player movement boundary check
+ if (player.x < 0) {
+    player.x = 0;
+  } else if (player.x > canvas.width - player.width) {
+    player.x = canvas.width - player.width;
+  }
+
+   // Opponent movement
+ opponent.x += opponent.speed * opponent.direction;
+
+  // Opponent boundary check
+  if (opponent.x < 0) {
+    opponent.x = 0;
+    opponent.direction *= -1; // Change direction
+  } else if (opponent.x > canvas.width - opponent.width) {
+    opponent.x = canvas.width - opponent.width;
+    opponent.direction *= -1; // Change direction
   }
 
   // Randomly change direction

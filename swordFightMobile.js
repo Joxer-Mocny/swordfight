@@ -96,10 +96,19 @@ function update() {
  if (!gameRunning) return;
 
  player.x += player.speed * moveDirection;
-
+ if (player.x < 0) {
+   player.x = 0;
+ } else if (player.x > canvas.width - player.width) {
+   player.x = canvas.width - player.width;
+ }
+ // Opponent movement with boundary check
  opponent.x += opponent.speed * opponent.direction;
- if (opponent.x <= 0 || opponent.x >= canvas.width - opponent.width) {
-   opponent.direction *= -1;
+ if (opponent.x < 0) {
+   opponent.x = 0;
+   opponent.direction *= -1; // Change direction
+ } else if (opponent.x > canvas.width - opponent.width) {
+   opponent.x = canvas.width - opponent.width;
+   opponent.direction *= -1; // Change direction
  }
 
  if (Math.random() < 0.01) {
