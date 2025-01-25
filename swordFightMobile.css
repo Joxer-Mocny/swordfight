@@ -60,6 +60,12 @@ body {
   justify-content: center;
   margin-top: 10px;
  }
+
+ #controls > div{
+  display: flex;
+  flex-direction: column;
+  margin: 0 10px;
+ }
  
  #controls button {
   margin: 5px;

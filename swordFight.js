@@ -96,75 +96,79 @@ function drawOpponent(x, y, isAttacking, isBlocking) {
 }
 
 function update() {
-  if (!gameRunning) return;
+    if (!gameRunning) return;
 
-  // Player movement boundary check
- if (player.x < 0) {
-    player.x = 0;
-  } else if (player.x > canvas.width - player.width) {
-    player.x = canvas.width - player.width;
-  }
+    // Opponent movement
+    opponent.x += opponent.speed * opponent.direction;
 
-   // Opponent movement
- opponent.x += opponent.speed * opponent.direction;
+    // Prevent opponent from going through the canvas edges
+    if (opponent.x <= 0 || opponent.x >= canvas.width - opponent.width) {
+        opponent.direction *= -1;
+    }
 
-  // Opponent boundary check
-  if (opponent.x < 0) {
-    opponent.x = 0;
-    opponent.direction *= -1; // Change direction
-  } else if (opponent.x > canvas.width - opponent.width) {
-    opponent.x = canvas.width - opponent.width;
-    opponent.direction *= -1; // Change direction
-  }
+    // Randomly change direction
+    if (Math.random() < 0.01) {
+        opponent.direction *= -1;
+    }
 
-  // Randomly change direction
-  if (Math.random() < 0.01) {
-      opponent.direction *= -1;
-  }
+    // Opponent attack and block logic
+    if (opponent.attackCooldown > 0) {
+        opponent.attackCooldown--;
+    } else {
+        if (Math.random() < 0.3) {
+            opponent.isBlocking = true;
+            opponent.isAttacking = false;
+        } else {
+            opponent.isAttacking = !opponent.isAttacking;
+            opponent.isBlocking = false;
+        }
+        opponent.attackCooldown = opponent.isAttacking ? 50 : 100;
+    }
 
-  // Opponent attack and block logic
-  if (opponent.attackCooldown > 0) {
-      opponent.attackCooldown--;
-  } else {
-      if (Math.random() < 0.3) {
-          opponent.isBlocking = true;
-          opponent.isAttacking = false;
-      } else {
-          opponent.isAttacking = !opponent.isAttacking;
-          opponent.isBlocking = false;
-      }
-      opponent.attackCooldown = opponent.isAttacking ? 50 : 100;
-  }
+    // Prevent player and opponent from passing through each other
+    if (player.x + player.width > opponent.x && player.x < opponent.x + opponent.width) {
+        if (player.isAttacking && !opponent.isBlocking) {
+            opponent.health--;
+            resetPositions();
+            if (opponent.health <= 0) {
+                message = "PREY SLAUGHTERED";
+                isGameOver = true;
+                gameRunning = false;
+                elapsedTime = (Date.now() - startTime) / 1000; // Calculate elapsed time in seconds
+            }
+        } else if (opponent.isAttacking && !player.isBlocking) {
+            player.health--;
+            resetPositions();
+            if (player.health <= 0) {
+                message = "You Died";
+                isGameOver = true;
+                gameRunning = false;
+                elapsedTime = (Date.now() - startTime) / 1000; // Calculate elapsed time in seconds
+            }
+        } else {
+            if (player.x < opponent.x) {
+                player.x = opponent.x - player.width;
+            } else {
+                opponent.x = player.x + player.width;
+            }
+        }
+    }
 
-  // Prevent player and opponent from passing through each other
-  if (player.x + player.width > opponent.x && player.x < opponent.x + opponent.width) {
-      if (player.isAttacking && !opponent.isBlocking) {
-          opponent.health--;
-          resetPositions();
-          if (opponent.health <= 0) {
-              message = "PREY SLAUGHTERED";
-              isGameOver = true;
-              gameRunning = false;
-              elapsedTime = (Date.now() - startTime) / 1000; // Calculate elapsed time in seconds
-          }
-      } else if (opponent.isAttacking && !player.isBlocking) {
-          player.health--;
-          resetPositions();
-          if (player.health <= 0) {
-              message = "You Died";
-              isGameOver = true;
-              gameRunning = false;
-              elapsedTime = (Date.now() - startTime) / 1000; // Calculate elapsed time in seconds
-          }
-      } else {
-          if (player.x < opponent.x) {
-              player.x = opponent.x - player.width;
-          } else {
-              opponent.x = player.x + player.width;
-          }
-      }
-  }
+    // Prevent player from going through the canvas edges
+    if (player.x < 0) {
+        player.x = 0;
+    } else if (player.x > canvas.width - player.width) {
+        player.x = canvas.width - player.width;
+    }
+
+    // Prevent opponent from passing through player when player is against the wall
+    if (player.x === 0 && opponent.x < player.x + player.width) {
+        opponent.x = player.x + player.width;
+    } else if (player.x === canvas.width - player.width && opponent.x > player.x - opponent.width) {
+        opponent.x = player.x - opponent.width;
+    }
 }
+
 
 function resetPositions() {
   player.x = 100;
